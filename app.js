@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     expression: '',
     history: JSON.parse(localStorage.getItem('oc_math_history')) || [],
     isDegMode: true,
+    isEvaluated: false,
   };
 
   const sciExpressionEl = document.getElementById('sci-expression');
@@ -140,14 +141,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const val = btn.dataset.val;
 
     if (val) {
-      // Numbers and decimal
-      if (sciOutputEl.textContent === '0' && val !== '.') {
-        mathState.expression = val;
+      if (mathState.isEvaluated) {
+        if (val === '.') {
+          mathState.expression = '0.';
+        } else {
+          mathState.expression = val;
+        }
+        mathState.isEvaluated = false;
       } else {
         mathState.expression += val;
       }
       updateMathDisplay();
     } else if (action) {
+      if (mathState.isEvaluated) {
+        if (['add', 'subtract', 'multiply', 'divide', 'percent', 'power', 'square'].includes(action)) {
+          mathState.expression = sciOutputEl.textContent;
+        } else if (['clear', 'rad-deg'].includes(action)) {
+          // Let these proceed as normal
+        } else {
+          mathState.expression = '';
+        }
+        mathState.isEvaluated = false;
+      }
+
       switch (action) {
         case 'clear':
           mathState.expression = '';
@@ -268,9 +284,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Log to history
         pushMathHistory(mathState.expression, formattedResult);
       }
+      mathState.isEvaluated = true;
     } catch (e) {
       console.error(e);
       sciOutputEl.textContent = 'Syntax Error';
+      mathState.isEvaluated = true;
     }
   }
 
@@ -342,8 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Click history item appends result to expression
       card.addEventListener('click', () => {
-        if (mathState.expression === '') {
+        if (mathState.expression === '' || mathState.isEvaluated) {
           mathState.expression = item.ans;
+          mathState.isEvaluated = false;
         } else {
           // If expression ends with operator, directly append, otherwise multiply
           const lastChar = mathState.expression.slice(-1);
