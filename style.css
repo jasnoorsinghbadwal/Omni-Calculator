@@ -1,0 +1,1746 @@
+/* OmniCalc - Custom Stylesheet (Futuristic Tech Dark Theme) */
+
+/* ==========================================================================
+   1. VARIABLES & COLOR PALETTES
+   ========================================================================== */
+:root {
+  /* Fonts */
+  --font-sans: 'Outfit', sans-serif;
+  --font-tech: 'Space Grotesk', sans-serif;
+
+  /* Premium Dark Theme (Default) */
+  --bg-app: #06070a;
+  --bg-sidebar: #0b0c13;
+  --bg-card: rgba(16, 18, 30, 0.7);
+  --bg-card-hover: rgba(22, 25, 42, 0.85);
+  --bg-input: #121422;
+  
+  --border-glow: rgba(139, 92, 246, 0.12);
+  --border-card: rgba(255, 255, 255, 0.05);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #475569;
+  
+  /* Accent Colors */
+  --accent-purple: #8b5cf6;
+  --accent-purple-glow: rgba(139, 92, 246, 0.35);
+  
+  --accent-pink: #ec4899;
+  --accent-pink-glow: rgba(236, 72, 153, 0.35);
+
+  --accent-blue: #3b82f6;
+  --accent-blue-glow: rgba(59, 130, 246, 0.35);
+
+  --accent-green: #10b981;
+  --accent-green-glow: rgba(16, 185, 129, 0.35);
+
+  --accent-yellow: #f59e0b;
+
+  --danger: #ef4444;
+  --danger-glow: rgba(239, 68, 68, 0.3);
+
+  --success: #10b981;
+  
+  /* Shadow & Highlights */
+  --glass-blur: 25px;
+  --card-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  --neon-glow: 0 0 25px var(--accent-purple-glow);
+  
+  --transition-normal: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-fast: 0.15s ease-out;
+}
+
+/* Light Theme overrides */
+body.light-theme {
+  --bg-app: #f1f5f9;
+  --bg-sidebar: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --bg-input: #f8fafc;
+  
+  --border-glow: rgba(99, 102, 241, 0.1);
+  --border-card: rgba(0, 0, 0, 0.05);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  
+  --accent-purple: #6366f1;
+  --accent-purple-glow: rgba(99, 102, 241, 0.2);
+  
+  --accent-pink: #d946ef;
+  --accent-pink-glow: rgba(217, 70, 239, 0.2);
+
+  --accent-blue: #2563eb;
+  --accent-blue-glow: rgba(37, 99, 235, 0.2);
+
+  --accent-green: #059669;
+  --accent-green-glow: rgba(5, 150, 105, 0.2);
+
+  --card-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
+  --neon-glow: 0 8px 20px rgba(99, 102, 241, 0.15);
+}
+
+/* ==========================================================================
+   2. GLOBAL STYLING
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Background animated spots */
+.calc-glow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  filter: blur(140px);
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.6;
+}
+
+body.light-theme .calc-glow-container {
+  opacity: 0.25;
+}
+
+.glow-spot {
+  position: absolute;
+  border-radius: 50%;
+  width: 40vw;
+  height: 40vw;
+  opacity: 0.3;
+}
+
+.spot-left {
+  background: var(--accent-purple);
+  top: -10vh;
+  left: -10vw;
+  animation: driftSpot1 20s infinite alternate ease-in-out;
+}
+
+.spot-right {
+  background: var(--accent-pink);
+  bottom: -15vh;
+  right: -5vw;
+  animation: driftSpot2 25s infinite alternate ease-in-out;
+}
+
+@keyframes driftSpot1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8vw, 8vh) scale(1.15); }
+}
+
+@keyframes driftSpot2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-10vw, -5vh) scale(0.9); }
+}
+
+/* ==========================================================================
+   3. APP STRUCTURE LAYOUT
+   ========================================================================== */
+.calc-app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar navigation */
+.calc-sidebar {
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.25rem 1.5rem;
+  z-index: 10;
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.25rem;
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.sidebar-brand h2 {
+  font-family: var(--font-tech);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-brand h2 span {
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+/* Navigation items */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.nav-tab {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  border-radius: 14px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-normal);
+}
+
+.nav-tab i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.nav-tab:hover {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+
+.nav-tab.active {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent-purple);
+  border-left: 3px solid var(--accent-purple);
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.05);
+}
+
+body.light-theme .nav-tab.active {
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--accent-purple);
+  border-color: var(--accent-purple);
+}
+
+.sidebar-footer {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 2rem;
+}
+
+/* Main workplace */
+.calc-main {
+  display: flex;
+  flex-direction: column;
+  padding: 2.25rem 3rem;
+  overflow-y: auto;
+}
+
+/* Header */
+.calc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.current-title-section h1 {
+  font-family: var(--font-tech);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.current-title-section p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.mobile-toggle {
+  display: none;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+/* Theme utility button */
+.util-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.util-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-secondary);
+  transform: translateY(-2px);
+}
+
+/* Viewport pane controller */
+.calculator-view-viewport {
+  flex: 1;
+  position: relative;
+}
+
+.calc-pane {
+  display: none;
+  animation: paneEntrance 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.calc-pane.active {
+  display: block;
+}
+
+@keyframes paneEntrance {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   4. COMPONENT BASES (CARDS, INPUTS, BUTTONS)
+   ========================================================================== */
+.input-card-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.results-glow-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  position: relative;
+  overflow: hidden;
+  transition: border var(--transition-normal);
+}
+
+.results-glow-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+}
+
+.flex-center-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 250px;
+}
+
+/* Form field controls */
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-row:last-child {
+  margin-bottom: 0;
+}
+
+.input-row label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.styled-input {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 0.9rem 1.1rem;
+  transition: all var(--transition-normal);
+  width: 100%;
+}
+
+.styled-input:focus {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+  background-color: var(--bg-card-hover);
+}
+
+/* Custom select dropdown */
+.styled-select {
+  appearance: none;
+  background-color: var(--bg-input);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1.1rem center;
+  background-size: 1.15rem;
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 0.9rem 2.5rem 0.9rem 1.1rem;
+  transition: all var(--transition-normal);
+  width: 100%;
+  cursor: pointer;
+}
+
+.styled-select:focus {
+  border-color: var(--accent-purple);
+}
+
+/* Number inputs row */
+.multi-number-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.num-input-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.num-input-col label {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.styled-number-input {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-card);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-tech);
+  font-size: 1rem;
+  padding: 0.75rem;
+  text-align: center;
+  width: 100%;
+}
+
+.styled-number-input:focus {
+  border-color: var(--accent-purple);
+}
+
+/* Sliders */
+.styled-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background: var(--bg-input);
+  outline: none;
+  margin: 1.25rem 0;
+  transition: background var(--transition-fast);
+}
+
+.styled-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.styled-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Buttons */
+.action-submit-btn {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  width: 100%;
+  box-shadow: 0 6px 15px rgba(139, 92, 246, 0.2);
+}
+
+.action-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.35);
+  filter: brightness(1.08);
+}
+
+.action-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   5. STANDARD & SCIENTIFIC CALCULATOR SPECIAL
+   ========================================================================== */
+.math-grid-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.calculator-body-card {
+  background: #0f1016;
+  border: 1px solid var(--border-card);
+  border-radius: 28px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-top: 4px solid var(--accent-purple);
+}
+
+.calc-screen {
+  background: #06070a;
+  border-radius: 18px;
+  padding: 1.75rem 1.5rem;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+.screen-history {
+  font-family: var(--font-tech);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+  text-align: right;
+  min-height: 24px;
+}
+
+.screen-output {
+  font-family: var(--font-tech);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  word-break: break-all;
+  text-align: right;
+}
+
+.calc-keyboard {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+}
+
+.btn {
+  border-radius: 14px;
+  border: none;
+  font-family: var(--font-tech);
+  font-size: 1.15rem;
+  font-weight: 500;
+  padding: 1.05rem 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-num {
+  background: #171924;
+}
+
+.btn-num:hover {
+  background: #232736;
+}
+
+.btn-operator {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-purple);
+  font-weight: 700;
+}
+
+.btn-operator:hover {
+  background: var(--accent-purple);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn-sci {
+  background: rgba(255,255,255,0.02);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.btn-sci:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-action {
+  background: #222533;
+  color: var(--text-secondary);
+}
+
+.btn-action:hover {
+  background: #2f3447;
+  color: #fff;
+}
+
+.btn-equals {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+}
+
+.btn-equals:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.double-width {
+  grid-column: span 2;
+}
+
+/* History logging */
+.calculator-history-sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 24px;
+  padding: 1.5rem;
+  height: 485px;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-card);
+  margin-bottom: 1rem;
+}
+
+.history-header h3 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.history-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.history-clear-btn:hover {
+  color: var(--danger);
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.history-item {
+  background: var(--bg-input);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  text-align: right;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.history-item:hover {
+  border-color: var(--accent-purple);
+  background-color: var(--bg-card-hover);
+}
+
+.history-item-exp {
+  font-family: var(--font-tech);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  word-break: break-all;
+}
+
+.history-item-ans {
+  font-family: var(--font-tech);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent-purple);
+}
+
+.empty-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-tertiary);
+  gap: 0.75rem;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.empty-history i {
+  font-size: 2.25rem;
+}
+
+.empty-history p {
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   6. SPLIT SUB-TABS NAVIGATION
+   ========================================================================== */
+.calc-sub-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-card);
+  padding-bottom: 0.5rem;
+}
+
+.sub-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.sub-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.sub-tab-btn.active {
+  background-color: var(--bg-card);
+  color: var(--accent-purple);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.sub-pane {
+  display: none;
+  animation: paneEntrance 0.4s ease-out;
+}
+
+.sub-pane.active {
+  display: block;
+}
+
+/* ==========================================================================
+   7. FORM AND RESULTS VIEW SPLITTERS
+   ========================================================================== */
+.form-and-results-split {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Date differential details */
+.duration-highlight-number {
+  text-align: center;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.duration-highlight-number span {
+  font-family: var(--font-tech);
+  font-size: 4rem;
+  font-weight: 700;
+  display: block;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff, var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.duration-highlight-number label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+.breakdown-pills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.breakdown-pill {
+  background-color: var(--bg-input);
+  border-radius: 12px;
+  padding: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.breakdown-pill i {
+  color: var(--accent-blue);
+  font-size: 1.1rem;
+}
+
+/* Large dates display */
+.large-date-output {
+  font-family: var(--font-tech);
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #fff, var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sub-date-info {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Radio buttons container */
+.custom-radio-group {
+  display: flex;
+  background-color: var(--bg-input);
+  border-radius: 12px;
+  padding: 0.25rem;
+  gap: 0.25rem;
+}
+
+.radio-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.5rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.radio-tab.active {
+  background-color: var(--accent-purple);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2);
+}
+
+/* Checkboxes */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.styled-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-purple);
+  cursor: pointer;
+}
+
+.checkbox-row label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   8. AGE TICKERS & ASTROLOGY GLOW
+   ========================================================================== */
+.live-ticker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.ticker-box {
+  background-color: var(--bg-input);
+  border-radius: 18px;
+  padding: 1.25rem 0.5rem;
+  text-align: center;
+  border: 1px solid var(--border-card);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.ticker-box span {
+  font-family: var(--font-tech);
+  font-size: 2.25rem;
+  font-weight: 700;
+  display: block;
+  color: var(--accent-pink);
+  text-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
+  line-height: 1.1;
+}
+
+.ticker-box label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.live-ticker-subgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.subticker-box {
+  background-color: rgba(255,255,255,0.01);
+  border-radius: 10px;
+  padding: 0.6rem 0.25rem;
+  text-align: center;
+}
+
+.subticker-box span {
+  font-family: var(--font-tech);
+  font-size: 1.25rem;
+  font-weight: 500;
+  display: block;
+  color: var(--text-primary);
+}
+
+.subticker-box label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* Astrology */
+.astrology-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+#birthday-countdown-card {
+  grid-column: span 2;
+  border-top: 2px solid var(--accent-pink);
+}
+
+.countdown-row {
+  font-family: var(--font-tech);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--accent-pink);
+  margin: 0.25rem 0;
+}
+
+.countdown-row span {
+  font-size: 2.25rem;
+}
+
+#birthday-countdown-card.birthday-celebration {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border-color: var(--accent-pink);
+  animation: pulseBirthday 2s infinite alternate ease-in-out;
+}
+
+@keyframes pulseBirthday {
+  0% { transform: scale(1); box-shadow: 0 0 15px rgba(236,72,153,0.15); }
+  100% { transform: scale(1.02); box-shadow: 0 0 25px rgba(236,72,153,0.3); }
+}
+
+.astro-glow-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.astro-glow-card h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.zodiac-info-layout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.zodiac-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: var(--accent-pink);
+}
+
+.zodiac-info-layout h5 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.zodiac-info-layout span {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.astro-subtext {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   9. TIME-MATH & WORLD CLOCKS
+   ========================================================================== */
+.large-time-output {
+  font-family: var(--font-tech);
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+  color: var(--accent-purple);
+  text-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+#time-math-sub-output {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* World time converters dashboard */
+.timezone-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tz-converter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.tz-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.tz-hour-slider-group {
+  margin-top: 1.5rem;
+}
+
+.tz-hour-slider-group label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  margin-top: -0.5rem;
+  font-weight: 600;
+}
+
+/* Cities list grid */
+.tz-results-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.city-clock-glow-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 18px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.city-clock-glow-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-purple);
+}
+
+.city-meta-col h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.city-meta-col span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.city-time-col {
+  text-align: right;
+}
+
+.city-time-col .city-time {
+  font-family: var(--font-tech);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent-purple);
+  line-height: 1.1;
+}
+
+.city-time-col .city-day {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   10. TIP SPLITTER DYNAMICS
+   ========================================================================== */
+.results-splitter-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.splitter-output-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.split-col h4 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.split-col span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: block;
+}
+
+.split-value {
+  font-family: var(--font-tech);
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.highlight-splitter-row {
+  background-color: var(--bg-input);
+  margin: 0 -2rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--border-card);
+  border-bottom: 1px solid var(--border-card);
+}
+
+.highlight-splitter-row .split-value {
+  color: var(--accent-green);
+  text-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+.splitter-mini-summary {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.splitter-mini-summary span {
+  font-family: var(--font-tech);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.quick-tip-pills {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.quick-tip-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-card);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  font-family: var(--font-tech);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quick-tip-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.quick-tip-btn.active {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+/* ==========================================================================
+   11. BMI GAUGES & HEALTH RESULTS
+   ========================================================================== */
+.bmi-results-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.bmi-radial-gauge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem 0;
+}
+
+.bmi-score-glow-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 6px solid var(--accent-green);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px var(--accent-green-glow);
+  transition: border 0.4s ease, box-shadow 0.4s ease;
+}
+
+.bmi-score-glow-circle span {
+  font-family: var(--font-tech);
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.bmi-score-glow-circle label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent-green);
+}
+
+/* Slider representations */
+.bmi-slider-gauge {
+  width: 100%;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.bmi-range-track {
+  display: flex;
+  height: 10px;
+  border-radius: 50px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.range-indicator {
+  flex: 1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.range-under { background-color: var(--accent-blue); }
+.range-normal { background-color: var(--accent-green); }
+.range-over { background-color: var(--accent-yellow); }
+.range-obese { background-color: var(--danger); }
+
+.bmi-indicator-pin {
+  width: 14px;
+  height: 14px;
+  background-color: #fff;
+  border: 3px solid var(--accent-green);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bmi-advice-container {
+  background-color: var(--bg-input);
+  border-radius: 14px;
+  padding: 1.25rem;
+  text-align: left;
+  border: 1px solid var(--border-card);
+  width: 100%;
+}
+
+.bmi-advice-container h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.bmi-advice-container p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   12. FINANCIAL GROWTH BUILDERS & TABLES
+   ========================================================================== */
+.compound-inputs-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.compound-inputs-row:last-child {
+  margin-bottom: 0;
+}
+
+.alignment-adjust-row {
+  justify-content: flex-end;
+}
+
+.investment-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.inv-summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.inv-summary-card h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.inv-summary-card span {
+  font-family: var(--font-tech);
+  font-size: 1.85rem;
+  font-weight: 700;
+  display: block;
+}
+
+.inv-card-green::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-green);
+}
+.inv-card-green span { color: var(--accent-green); }
+
+.inv-card-cyan::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-blue);
+}
+.inv-card-cyan span { color: var(--accent-blue); }
+
+.inv-card-purple::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-purple);
+}
+.inv-card-purple span { color: var(--accent-purple); }
+
+/* Growth Schedule Table */
+.investment-table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 24px;
+  padding: 1.75rem;
+  box-shadow: var(--card-shadow);
+}
+
+.table-scroll-box {
+  max-height: 400px;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-top: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-card);
+}
+
+.growth-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: var(--font-sans);
+}
+
+.growth-schedule-table th, .growth-schedule-table td {
+  padding: 0.9rem 1.25rem;
+  font-size: 0.9rem;
+}
+
+.growth-schedule-table th {
+  background-color: var(--bg-input);
+  color: var(--text-secondary);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: 1.5px solid var(--border-card);
+}
+
+.growth-schedule-table td {
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  color: var(--text-primary);
+  font-family: var(--font-tech);
+}
+
+.growth-schedule-table tbody tr:hover {
+  background-color: rgba(255,255,255,0.01);
+}
+
+/* ==========================================================================
+   13. MOBILE & TABLET RESPONSIVENESS
+   ========================================================================== */
+@media (max-width: 1080px) {
+  .math-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .calculator-history-sidebar {
+    height: 300px;
+  }
+  
+  .form-and-results-split {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .calc-app {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Sidebar Drawer overlay dismiss screen */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-normal);
+  }
+  
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Sidebar shifts to sliding panel on mobile */
+  .calc-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+  }
+  
+  .calc-sidebar.open {
+    left: 0;
+  }
+  
+  .calc-main {
+    padding: 1.5rem 1rem;
+  }
+  
+  /* Mobile header alignment */
+  .calc-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .mobile-toggle {
+    display: block;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    grid-column: 1;
+  }
+  
+  .current-title-section {
+    grid-column: 2;
+  }
+  
+  .current-title-section h1 {
+    font-size: 1.35rem;
+  }
+  
+  .header-utilities {
+    grid-column: 3;
+    justify-self: end;
+  }
+  
+  /* Standard Calc grid keyboard key aspects */
+  .calc-keyboard {
+    gap: 0.4rem;
+  }
+  
+  .calc-keyboard .btn {
+    aspect-ratio: 1 !important;
+    padding: 0 !important;
+    height: auto !important;
+    font-size: 1.05rem !important;
+    border-radius: 10px;
+  }
+  
+  .double-width {
+    aspect-ratio: 2 / 1 !important;
+  }
+  
+  /* Sub tabs scrolling indicator */
+  .calc-sub-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  
+  .calc-sub-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Age Ticker rescalings (Prevent wrapping) */
+  .live-ticker-grid {
+    gap: 0.6rem;
+  }
+  
+  .ticker-box {
+    padding: 1rem 0.25rem;
+    border-radius: 12px;
+  }
+  
+  .ticker-box span {
+    font-size: 1.55rem;
+  }
+  
+  .subticker-box span {
+    font-size: 1rem;
+  }
+  
+  /* Astrology Grid stacks */
+  .astrology-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  #birthday-countdown-card {
+    grid-column: span 1;
+  }
+  
+  /* Time Zone Clocks stack */
+  .tz-inputs-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .tz-results-list {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Tip bill splitter layout values */
+  .split-value {
+    font-size: 2.15rem;
+  }
+  
+  /* BMI scores center layout */
+  .bmi-radial-gauge-container {
+    transform: scale(0.95);
+  }
+  
+  /* Compounding stacks */
+  .compound-inputs-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .investment-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

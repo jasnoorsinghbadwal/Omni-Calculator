@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniCalc | The Ultimate Multi-Calculator Hub</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="An elegant, responsive, and ultra-modern suite of 7 calculators including Standard & Scientific Math, exact Age & Zodiac countdowns, Date durations, Time conversions, Tip splitters, BMI health trackers, and Compound Interest builders.">
+  <meta name="keywords" content="multi calculator, online scientific calculator, age calculator, date duration calculator, time zone converter, split bill tip calculator, BMI calculator, compound interest calculator">
+  <meta name="author" content="OmniCalc">
+
+  <!-- Google Fonts: Outfit (Geometric) & Space Grotesk (Tech) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for Premium Dashboard Iconography -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Ambient Shifting Background Glows -->
+  <div class="calc-glow-container">
+    <div class="glow-spot spot-left"></div>
+    <div class="glow-spot spot-right"></div>
+  </div>
+
+  <div class="calc-app">
+    
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="calc-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon"><i class="fa-solid fa-calculator"></i></div>
+        <h2>Omni<span>Calc</span></h2>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-tab active" data-calc="standard" aria-label="Standard and Scientific Calculator">
+          <i class="fa-solid fa-hashtag"></i>
+          <span>Standard & Sci</span>
+        </button>
+        <button class="nav-tab" data-calc="age" aria-label="Age and Zodiac Calculator">
+          <i class="fa-solid fa-cake-candles"></i>
+          <span>Age & Zodiac</span>
+        </button>
+        <button class="nav-tab" data-calc="date" aria-label="Date and Days Calculator">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>Date & Days</span>
+        </button>
+        <button class="nav-tab" data-calc="time" aria-label="Time and Time Zone Calculator">
+          <i class="fa-solid fa-clock"></i>
+          <span>Time Converter</span>
+        </button>
+        <button class="nav-tab" data-calc="tip" aria-label="Tip and Split Bill Calculator">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+          <span>Tip Splitter</span>
+        </button>
+        <button class="nav-tab" data-calc="bmi" aria-label="BMI Health Analyzer">
+          <i class="fa-solid fa-heart-pulse"></i>
+          <span>BMI Analyzer</span>
+        </button>
+        <button class="nav-tab" data-calc="compound" aria-label="Compound Interest Calculator">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Compound Growth</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>© 2026 OmniCalc Hub</p>
+      </div>
+    </aside>
+    
+    <!-- Mobile Drawer Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- MAIN DISPLAY SPACE -->
+    <main class="calc-main">
+      
+      <!-- HEADER BAR -->
+      <header class="calc-header">
+        <div class="mobile-toggle" id="mobile-nav-toggle">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+        
+        <div class="current-title-section">
+          <h1 id="calc-title">Standard & Scientific Calculator</h1>
+          <p id="calc-description">High-fidelity computation with memory storage and history logging.</p>
+        </div>
+
+        <div class="header-utilities">
+          <button class="util-btn" id="theme-toggle" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- ACTIVE CALCULATOR CONTAINER -->
+      <section class="calculator-view-viewport">
+        
+        <!-- 1. STANDARD & SCIENTIFIC CALCULATOR PANEL -->
+        <div class="calc-pane active" id="pane-standard">
+          <div class="math-grid-layout">
+            
+            <div class="calculator-body-card">
+              <!-- Digital Expression Display Screen -->
+              <div class="calc-screen">
+                <div class="screen-history" id="sci-expression"></div>
+                <div class="screen-output" id="sci-output">0</div>
+              </div>
+              
+              <!-- Keyboard layout grid -->
+              <div class="calc-keyboard">
+                <!-- Row 1: Sci functions -->
+                <button class="btn btn-sci" data-action="sin">sin</button>
+                <button class="btn btn-sci" data-action="cos">cos</button>
+                <button class="btn btn-sci" data-action="tan">tan</button>
+                <button class="btn btn-sci" data-action="power">xʸ</button>
+                <button class="btn btn-sci" data-action="sqrt">√</button>
+                
+                <!-- Row 2 -->
+                <button class="btn btn-sci" data-action="log">log</button>
+                <button class="btn btn-sci" data-action="ln">ln</button>
+                <button class="btn btn-sci" data-action="pi">π</button>
+                <button class="btn btn-sci" data-action="e">e</button>
+                <button class="btn btn-sci" data-action="factorial">x!</button>
+
+                <!-- Row 3 -->
+                <button class="btn btn-danger" data-action="clear">AC</button>
+                <button class="btn btn-action" data-action="backspace"><i class="fa-solid fa-backspace"></i></button>
+                <button class="btn btn-action" data-action="parenthesis-open">(</button>
+                <button class="btn btn-action" data-action="parenthesis-close">)</button>
+                <button class="btn btn-operator" data-action="divide">÷</button>
+                
+                <!-- Row 4 -->
+                <button class="btn btn-sci" data-action="inverse">x⁻¹</button>
+                <button class="btn btn-num" data-val="7">7</button>
+                <button class="btn btn-num" data-val="8">8</button>
+                <button class="btn btn-num" data-val="9">9</button>
+                <button class="btn btn-operator" data-action="multiply">×</button>
+                
+                <!-- Row 5 -->
+                <button class="btn btn-sci" data-action="square">x²</button>
+                <button class="btn btn-num" data-val="4">4</button>
+                <button class="btn btn-num" data-val="5">5</button>
+                <button class="btn btn-num" data-val="6">6</button>
+                <button class="btn btn-operator" data-action="subtract">-</button>
+                
+                <!-- Row 6 -->
+                <button class="btn btn-sci" data-action="percent">%</button>
+                <button class="btn btn-num" data-val="1">1</button>
+                <button class="btn btn-num" data-val="2">2</button>
+                <button class="btn btn-num" data-val="3">3</button>
+                <button class="btn btn-operator" data-action="add">+</button>
+                
+                <!-- Row 7 -->
+                <button class="btn btn-sci" data-action="rad-deg" id="btn-deg-toggle">DEG</button>
+                <button class="btn btn-num double-width" data-val="0">0</button>
+                <button class="btn btn-num" data-val=".">.</button>
+                <button class="btn btn-equals" data-action="equals">=</button>
+              </div>
+            </div>
+
+            <!-- History Logs drawer -->
+            <div class="calculator-history-sidebar">
+              <div class="history-header">
+                <h3>Computation History</h3>
+                <button class="history-clear-btn" id="clear-math-history" title="Clear History" aria-label="Clear history">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+              <div class="history-list" id="math-history-list">
+                <div class="empty-history">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <p>No calculations logged yet.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2. AGE & ZODIAC CALCULATOR PANEL -->
+        <div class="calc-pane" id="pane-age">
+          <div class="form-and-results-split">
+            
+            <div class="input-card-panel">
+              <div class="input-row">
+                <label for="birth-date">Select Date of Birth</label>
+                <input type="date" id="birth-date" value="1998-05-15" class="styled-input">
+              </div>
+              <div class="input-row">
+                <label for="age-target-date">Calculate Age At Date</label>
+                <input type="date" id="age-target-date" class="styled-input">
+              </div>
+              <button class="action-submit-btn" id="calculate-age-btn">Analyze Life Details</button>
+            </div>
+
+            <div class="results-visual-container">
+              <!-- Live running counter for Age -->
+              <div class="results-glow-card">
+                <h3>Your Exact Age</h3>
+                <div class="live-ticker-grid">
+                  <div class="ticker-box">
+                    <span id="age-years">--</span>
+                    <label>Years</label>
+                  </div>
+                  <div class="ticker-box">
+                    <span id="age-months">--</span>
+                    <label>Months</label>
+                  </div>
+                  <div class="ticker-box">
+                    <span id="age-days">--</span>
+                    <label>Days</label>
+                  </div>
+                </div>
+                <div class="live-ticker-subgrid">
+                  <div class="subticker-box"><span id="age-hours">--</span><label>Hours</label></div>
+                  <div class="subticker-box"><span id="age-minutes">--</span><label>Mins</label></div>
+                  <div class="subticker-box"><span id="age-seconds">--</span><label>Secs</label></div>
+                </div>
+              </div>
+
+              <!-- Birthday Countdown & Astrological Sign panels -->
+              <div class="astrology-grid">
+                <div class="astro-glow-card" id="birthday-countdown-card">
+                  <h4>Next Birthday Countdown</h4>
+                  <div class="countdown-row">
+                    <span id="bday-countdown-months">--</span>m 
+                    <span id="bday-countdown-days">--</span>d
+                  </div>
+                  <p id="bday-countdown-sub">Time flies!</p>
+                </div>
+                
+                <div class="astro-glow-card">
+                  <h4>Zodiac Sign</h4>
+                  <div class="zodiac-info-layout">
+                    <div class="zodiac-icon" id="zodiac-symbol"><i class="fa-solid fa-star"></i></div>
+                    <div>
+                      <h5 id="zodiac-name">---</h5>
+                      <span id="zodiac-dates">---</span>
+                    </div>
+                  </div>
+                  <p id="zodiac-desc" class="astro-subtext">Select birthdate to view character traits.</p>
+                </div>
+
+                <div class="astro-glow-card">
+                  <h4>Chinese Zodiac</h4>
+                  <div class="zodiac-info-layout">
+                    <div class="zodiac-icon" id="chinese-zodiac-icon"><i class="fa-solid fa-dragon"></i></div>
+                    <div>
+                      <h5 id="chinese-zodiac-name">---</h5>
+                      <span id="chinese-zodiac-year">Year animal</span>
+                    </div>
+                  </div>
+                  <p id="chinese-zodiac-desc" class="astro-subtext">Discover your eastern birth affinity animal.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. DATE & DAYS CALCULATOR PANEL -->
+        <div class="calc-pane" id="pane-date">
+          <div class="calc-sub-tabs">
+            <button class="sub-tab-btn active" data-sub="diff">Days Between Dates</button>
+            <button class="sub-tab-btn" data-sub="addsub">Add/Subtract Days</button>
+          </div>
+
+          <div class="sub-pane active" id="date-sub-diff">
+            <div class="form-and-results-split">
+              <div class="input-card-panel">
+                <div class="input-row">
+                  <label for="date-start">Start Date</label>
+                  <input type="date" id="date-start" class="styled-input">
+                </div>
+                <div class="input-row">
+                  <label for="date-end">End Date</label>
+                  <input type="date" id="date-end" class="styled-input">
+                </div>
+                <div class="checkbox-row">
+                  <input type="checkbox" id="exclude-weekends" class="styled-checkbox">
+                  <label for="exclude-weekends">Exclude Saturday & Sunday (Work Days Only)</label>
+                </div>
+                <button class="action-submit-btn" id="calculate-date-diff-btn">Calculate Duration</button>
+              </div>
+
+              <div class="results-visual-container">
+                <div class="results-glow-card">
+                  <h3>Calculated Duration</h3>
+                  <div class="duration-highlight-number">
+                    <span id="diff-total-days">0</span>
+                    <label>Total Days</label>
+                  </div>
+                  
+                  <div class="breakdown-pills-grid">
+                    <div class="breakdown-pill">
+                      <i class="fa-solid fa-calendar"></i>
+                      <span>Years: <strong id="diff-years">0</strong></span>
+                    </div>
+                    <div class="breakdown-pill">
+                      <i class="fa-solid fa-calendar-day"></i>
+                      <span>Months: <strong id="diff-months">0</strong></span>
+                    </div>
+                    <div class="breakdown-pill">
+                      <i class="fa-solid fa-calendar-week"></i>
+                      <span>Weeks: <strong id="diff-weeks">0</strong></span>
+                    </div>
+                    <div class="breakdown-pill">
+                      <i class="fa-solid fa-business-time"></i>
+                      <span>Business Days: <strong id="diff-business-days">0</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-pane" id="date-sub-addsub">
+            <div class="form-and-results-split">
+              <div class="input-card-panel">
+                <div class="input-row">
+                  <label for="date-base">Start Base Date</label>
+                  <input type="date" id="date-base" class="styled-input">
+                </div>
+                
+                <div class="input-row">
+                  <label>Operation Mode</label>
+                  <div class="custom-radio-group">
+                    <button class="radio-tab active" data-op="add"><i class="fa-solid fa-plus"></i> Add</button>
+                    <button class="radio-tab" data-op="subtract"><i class="fa-solid fa-minus"></i> Subtract</button>
+                  </div>
+                </div>
+
+                <div class="multi-number-inputs">
+                  <div class="num-input-col">
+                    <label for="add-years">Years</label>
+                    <input type="number" id="add-years" min="0" value="0" class="styled-number-input">
+                  </div>
+                  <div class="num-input-col">
+                    <label for="add-months">Months</label>
+                    <input type="number" id="add-months" min="0" value="0" class="styled-number-input">
+                  </div>
+                  <div class="num-input-col">
+                    <label for="add-weeks">Weeks</label>
+                    <input type="number" id="add-weeks" min="0" value="0" class="styled-number-input">
+                  </div>
+                  <div class="num-input-col">
+                    <label for="add-days">Days</label>
+                    <input type="number" id="add-days" min="0" value="0" class="styled-number-input">
+                  </div>
+                </div>
+
+                <button class="action-submit-btn" id="calculate-date-addsub-btn">Compute Date</button>
+              </div>
+
+              <div class="results-visual-container">
+                <div class="results-glow-card flex-center-card">
+                  <h3>Resultant Target Date</h3>
+                  <div class="large-date-output" id="addsub-target-date">-- -- ----</div>
+                  <div class="sub-date-info" id="addsub-weekday">Day of the Week</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. TIME & TIME-ZONE CALCULATOR PANEL -->
+        <div class="calc-pane" id="pane-time">
+          <div class="calc-sub-tabs">
+            <button class="sub-tab-btn active" data-sub="time-add">Time Duration Math</button>
+            <button class="sub-tab-btn" data-sub="timezone">World Time Zone Converter</button>
+          </div>
+
+          <!-- Time Math -->
+          <div class="sub-pane active" id="time-sub-time-add">
+            <div class="form-and-results-split">
+              <div class="input-card-panel">
+                <div class="time-math-inputs-container">
+                  <h4>Base Duration</h4>
+                  <div class="multi-number-inputs">
+                    <div class="num-input-col">
+                      <label>Hours</label>
+                      <input type="number" id="time-h1" min="0" value="0" class="styled-number-input">
+                    </div>
+                    <div class="num-input-col">
+                      <label>Minutes</label>
+                      <input type="number" id="time-m1" min="0" max="59" value="0" class="styled-number-input">
+                    </div>
+                    <div class="num-input-col">
+                      <label>Seconds</label>
+                      <input type="number" id="time-s1" min="0" max="59" value="0" class="styled-number-input">
+                    </div>
+                  </div>
+                  
+                  <div class="input-row" style="margin-top: 1rem;">
+                    <div class="custom-radio-group">
+                      <button class="radio-tab active" id="time-op-add"><i class="fa-solid fa-plus"></i> Add Time</button>
+                      <button class="radio-tab" id="time-op-sub"><i class="fa-solid fa-minus"></i> Subtract Time</button>
+                    </div>
+                  </div>
+
+                  <h4 style="margin-top: 1.5rem;">Modifier Duration</h4>
+                  <div class="multi-number-inputs">
+                    <div class="num-input-col">
+                      <label>Hours</label>
+                      <input type="number" id="time-h2" min="0" value="0" class="styled-number-input">
+                    </div>
+                    <div class="num-input-col">
+                      <label>Minutes</label>
+                      <input type="number" id="time-m2" min="0" max="59" value="0" class="styled-number-input">
+                    </div>
+                    <div class="num-input-col">
+                      <label>Seconds</label>
+                      <input type="number" id="time-s2" min="0" max="59" value="0" class="styled-number-input">
+                    </div>
+                  </div>
+                </div>
+
+                <button class="action-submit-btn" id="calculate-time-math-btn" style="margin-top: 1.5rem;">Calculate Duration</button>
+              </div>
+
+              <div class="results-visual-container">
+                <div class="results-glow-card flex-center-card">
+                  <h3>Calculated Result</h3>
+                  <div class="large-time-output" id="time-math-output">00:00:00</div>
+                  <p id="time-math-sub-output">Total equivalent hours: 0 hrs</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time Zone Converter -->
+          <div class="sub-pane" id="time-sub-timezone">
+            <div class="timezone-dashboard">
+              <div class="tz-converter-card">
+                <div class="tz-inputs-grid">
+                  <div class="input-row">
+                    <label for="tz-base-select">Select Base Time Zone</label>
+                    <select id="tz-base-select" class="styled-select">
+                      <!-- Filled dynamically in app.js -->
+                    </select>
+                  </div>
+                  <div class="input-row">
+                    <label for="tz-base-time">Select Base Time</label>
+                    <input type="time" id="tz-base-time" class="styled-input">
+                  </div>
+                </div>
+
+                <!-- Slider to dynamically shift hours -->
+                <div class="tz-hour-slider-group">
+                  <label for="tz-slider">Drag to shift hours dynamically:</label>
+                  <input type="range" id="tz-slider" min="0" max="1439" value="720" class="styled-slider">
+                  <div class="slider-labels">
+                    <span>12 AM</span>
+                    <span>6 AM</span>
+                    <span>12 PM</span>
+                    <span>6 PM</span>
+                    <span>12 AM</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tz-results-list" id="tz-converter-results">
+                <!-- Dynamically filled with glowing city clocks -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. TIP & SPLIT BILL CALCULATOR PANEL -->
+        <div class="calc-pane" id="pane-tip">
+          <div class="form-and-results-split">
+            
+            <div class="input-card-panel">
+              <div class="input-row">
+                <label for="bill-amount">Total Bill Amount ($)</label>
+                <input type="number" id="bill-amount" min="0.01" step="0.01" value="100.00" class="styled-input">
+              </div>
+              
+              <div class="input-row">
+                <div class="slider-label-row">
+                  <label for="tip-pct">Tip Percentage: <span id="tip-pct-val">15%</span></label>
+                  <div class="quick-tip-pills">
+                    <button class="quick-tip-btn" data-tip="10">10%</button>
+                    <button class="quick-tip-btn active" data-tip="15">15%</button>
+                    <button class="quick-tip-btn" data-tip="18">18%</button>
+                    <button class="quick-tip-btn" data-tip="20">20%</button>
+                  </div>
+                </div>
+                <input type="range" id="tip-pct" min="0" max="50" value="15" class="styled-slider">
+              </div>
+
+              <div class="input-row">
+                <div class="slider-label-row">
+                  <label for="split-count">Split Bill Across: <span id="split-count-val">2 People</span></label>
+                </div>
+                <input type="range" id="split-count" min="1" max="30" value="2" class="styled-slider">
+              </div>
+            </div>
+
+            <div class="results-visual-container">
+              <div class="results-glow-card results-splitter-box">
+                <div class="splitter-output-row">
+                  <div class="split-col">
+                    <h4>Tip Amount</h4>
+                    <span>Per Person</span>
+                  </div>
+                  <div class="split-value" id="tip-per-person">$7.50</div>
+                </div>
+
+                <div class="splitter-output-row highlight-splitter-row">
+                  <div class="split-col">
+                    <h4>Total Bill</h4>
+                    <span>Per Person</span>
+                  </div>
+                  <div class="split-value" id="total-per-person">$57.50</div>
+                </div>
+                
+                <div class="splitter-mini-summary">
+                  <p>Grand Total Bill: <span id="grand-total-bill">$115.00</span></p>
+                  <p>Grand Total Tip: <span id="grand-total-tip">$15.00</span></p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 6. BMI HEALTH ANALYZER PANEL -->
+        <div class="calc-pane" id="pane-bmi">
+          <div class="form-and-results-split">
+            
+            <div class="input-card-panel">
+              <div class="input-row">
+                <label>Measurement System</label>
+                <div class="custom-radio-group">
+                  <button class="radio-tab active" id="bmi-sys-metric">Metric (kg / cm)</button>
+                  <button class="radio-tab" id="bmi-sys-imperial">Imperial (lbs / in)</button>
+                </div>
+              </div>
+
+              <!-- Metric Form -->
+              <div class="bmi-form-group" id="bmi-metric-inputs">
+                <div class="input-row">
+                  <label for="bmi-weight-metric">Weight (kg)</label>
+                  <input type="number" id="bmi-weight-metric" min="10" max="300" value="70" class="styled-input">
+                </div>
+                <div class="input-row">
+                  <label for="bmi-height-metric">Height (cm)</label>
+                  <input type="number" id="bmi-height-metric" min="50" max="250" value="175" class="styled-input">
+                </div>
+              </div>
+
+              <!-- Imperial Form (Hidden by default) -->
+              <div class="bmi-form-group" id="bmi-imperial-inputs" style="display: none;">
+                <div class="input-row">
+                  <label for="bmi-weight-imperial">Weight (lbs)</label>
+                  <input type="number" id="bmi-weight-imperial" min="20" max="600" value="150" class="styled-input">
+                </div>
+                <div class="multi-number-inputs">
+                  <div class="num-input-col">
+                    <label for="bmi-height-feet">Height (Feet)</label>
+                    <input type="number" id="bmi-height-feet" min="1" max="8" value="5" class="styled-number-input">
+                  </div>
+                  <div class="num-input-col">
+                    <label for="bmi-height-inches">Height (Inches)</label>
+                    <input type="number" id="bmi-height-inches" min="0" max="11" value="9" class="styled-number-input">
+                  </div>
+                </div>
+              </div>
+
+              <button class="action-submit-btn" id="calculate-bmi-btn">Analyze BMI Score</button>
+            </div>
+
+            <div class="results-visual-container">
+              <div class="results-glow-card bmi-results-card">
+                <h3>Your Health Report</h3>
+                
+                <!-- BMI Radial Gauge -->
+                <div class="bmi-radial-gauge-container">
+                  <div class="bmi-score-glow-circle" id="bmi-score-ring">
+                    <span id="bmi-value-display">22.9</span>
+                    <label id="bmi-category-label">Normal</label>
+                  </div>
+                </div>
+
+                <!-- Custom Slider representation of scale -->
+                <div class="bmi-slider-gauge">
+                  <div class="bmi-range-track">
+                    <span class="range-indicator range-under" title="Underweight ( < 18.5 )">Under</span>
+                    <span class="range-indicator range-normal" title="Normal Weight ( 18.5 - 24.9 )">Normal</span>
+                    <span class="range-indicator range-over" title="Overweight ( 25.0 - 29.9 )">Over</span>
+                    <span class="range-indicator range-obese" title="Obese ( >= 30.0 )">Obese</span>
+                  </div>
+                  <div class="bmi-indicator-pin" id="bmi-pin" style="left: 45%;"></div>
+                </div>
+
+                <!-- Targeted Advice -->
+                <div class="bmi-advice-container">
+                  <h4 id="bmi-advice-title">Healthy Weight Range</h4>
+                  <p id="bmi-advice-text">Your BMI is within the healthy weight target range. Excellent job! Keep doing what you're doing, eating balanced nutrients and engaging in daily exercises.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 7. COMPOUND INTEREST / INVESTMENT CALCULATOR PANEL -->
+        <div class="calc-pane" id="pane-compound">
+          <div class="interest-input-dashboard">
+            <div class="input-card-panel">
+              <div class="compound-inputs-row">
+                <div class="input-row">
+                  <label for="inv-principal">Initial Principal ($)</label>
+                  <input type="number" id="inv-principal" min="0" value="10000" class="styled-input">
+                </div>
+                <div class="input-row">
+                  <label for="inv-monthly">Monthly Contribution ($)</label>
+                  <input type="number" id="inv-monthly" min="0" value="200" class="styled-input">
+                </div>
+                <div class="input-row">
+                  <label for="inv-rate">Annual Interest Rate (%)</label>
+                  <input type="number" id="inv-rate" min="0" max="100" step="0.1" value="8" class="styled-input">
+                </div>
+              </div>
+
+              <div class="compound-inputs-row" style="margin-top: 1rem;">
+                <div class="input-row">
+                  <label for="inv-years">Years to Grow</label>
+                  <input type="number" id="inv-years" min="1" max="50" value="10" class="styled-input">
+                </div>
+                <div class="input-row">
+                  <label for="inv-compound-freq">Compounding Frequency</label>
+                  <select id="inv-compound-freq" class="styled-select">
+                    <option value="12" selected>Monthly</option>
+                    <option value="4">Quarterly</option>
+                    <option value="2">Semi-Annually</option>
+                    <option value="1">Annually</option>
+                    <option value="365">Daily</option>
+                  </select>
+                </div>
+                <div class="input-row alignment-adjust-row">
+                  <button class="action-submit-btn full-width-btn" id="calculate-investment-btn" style="margin-top: 0;">Calculate Growth</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Summary Results Boxes -->
+            <div class="investment-summary-grid">
+              <div class="inv-summary-card inv-card-green">
+                <h4>Total Investment Value</h4>
+                <span id="inv-total-value">$41,529.50</span>
+              </div>
+              <div class="inv-summary-card inv-card-cyan">
+                <h4>Total Principal Invested</h4>
+                <span id="inv-total-principal">$34,000.00</span>
+              </div>
+              <div class="inv-summary-card inv-card-purple">
+                <h4>Interest Accumulated</h4>
+                <span id="inv-total-interest">$7,529.50</span>
+              </div>
+            </div>
+
+            <!-- Data breakdown HTML Table -->
+            <div class="investment-table-container">
+              <div class="history-header">
+                <h3>Annual Balance Growth Schedule</h3>
+              </div>
+              <div class="table-scroll-box">
+                <table class="growth-schedule-table">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Total Principal</th>
+                      <th>Interest Earned</th>
+                      <th>Total Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody id="investment-growth-table-body">
+                    <!-- Populated dynamically in app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
