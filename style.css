@@ -129,9 +129,11 @@ body {
   pointer-events: none;
   overflow: hidden;
   opacity: 0.6;
+  display: none; /* Hidden in dark mode */
 }
 
 body.light-theme .calc-glow-container {
+  display: block;
   opacity: 0.25;
 }
 
