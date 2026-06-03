@@ -48,6 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
       calcDescription.textContent = meta.desc;
     }
 
+    // Mobile history button & drawer visibility
+    const historyToggleBtn = document.getElementById('mobile-history-toggle');
+    const historySidebar = document.querySelector('.calculator-history-sidebar');
+    const historyOverlay = document.getElementById('history-overlay');
+    if (historyToggleBtn) {
+      if (tabKey === 'standard') {
+        historyToggleBtn.classList.remove('hide-toggle');
+      } else {
+        historyToggleBtn.classList.add('hide-toggle');
+      }
+    }
+    if (historySidebar && historyOverlay) {
+      historySidebar.classList.remove('open');
+      historyOverlay.classList.remove('active');
+    }
+
     // Close mobile menu if open
     sidebar.classList.remove('open');
     sidebarOverlay.classList.remove('active');
@@ -70,6 +86,33 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebar.classList.remove('open');
     sidebarOverlay.classList.remove('active');
   });
+
+  // Mobile history panel toggle
+  const historyToggleBtn = document.getElementById('mobile-history-toggle');
+  const historySidebar = document.querySelector('.calculator-history-sidebar');
+  const historyOverlay = document.getElementById('history-overlay');
+
+  function toggleHistoryPanel() {
+    if (!historySidebar || !historyOverlay) return;
+    const isOpen = historySidebar.classList.contains('open');
+    if (isOpen) {
+      historySidebar.classList.remove('open');
+      historyOverlay.classList.remove('active');
+    } else {
+      historySidebar.classList.add('open');
+      historyOverlay.classList.add('active');
+    }
+  }
+
+  if (historyToggleBtn) {
+    historyToggleBtn.addEventListener('click', toggleHistoryPanel);
+  }
+  if (historyOverlay) {
+    historyOverlay.addEventListener('click', () => {
+      if (historySidebar) historySidebar.classList.remove('open');
+      historyOverlay.classList.remove('active');
+    });
+  }
 
   // Sub-pane tabs router (Date & Time calcs have sub-menus)
   const subTabButtons = document.querySelectorAll('.sub-tab-btn');
