@@ -268,6 +268,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return result;
     };
 
+    // Auto-complete missing closing parentheses
+    const openParens = (parsedExpr.match(/\(/g) || []).length;
+    const closeParens = (parsedExpr.match(/\)/g) || []).length;
+    if (openParens > closeParens) {
+      parsedExpr += ')'.repeat(openParens - closeParens);
+    }
+
     try {
       // Evaluate expression safely in local scope
       // We map the functions sin, cos, tan, log, ln, factorial into the scope of Function constructor
