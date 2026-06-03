@@ -97,6 +97,9 @@ body {
   background-color: var(--bg-app);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
@@ -1587,12 +1590,17 @@ body.light-theme .nav-tab.active {
   /* Full-screen immersive mobile layout */
   html, body {
     height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
   }
 
   .calc-app {
     grid-template-columns: 1fr;
     height: 100dvh;
+    max-height: 100dvh;
     overflow: hidden;
   }
   
@@ -1635,9 +1643,13 @@ body.light-theme .nav-tab.active {
   
   .calc-main {
     padding: 0.5rem 0.5rem;
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
     height: 100dvh;
+    max-height: 100dvh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    flex: 1;
   }
   
   /* Mobile header alignment */
