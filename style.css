@@ -1842,3 +1842,38 @@ body.light-theme * {
 body, .app-container, .calc-sidebar, .calculator-body-card, .calc-screen, .btn, .sub-tab-btn, .history-card {
   transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
+
+/* Calculator Light Mode Overrides */
+body.light-theme .calculator-body-card {
+  background: var(--bg-card);
+}
+body.light-theme .calc-screen {
+  background: var(--bg-input);
+}
+body.light-theme .screen-output {
+  color: var(--text-primary);
+}
+body.light-theme .btn-num {
+  background: #ffffff;
+  border: 1px solid var(--border-card);
+}
+body.light-theme .btn-num:hover {
+  background: #f8fafc;
+}
+body.light-theme .btn-action {
+  background: #f1f5f9;
+  color: var(--text-primary);
+  border: 1px solid var(--border-card);
+}
+body.light-theme .btn-action:hover {
+  background: #e2e8f0;
+  color: var(--text-primary);
+}
+body.light-theme .btn-sci {
+  background: rgba(0,0,0,0.03);
+  color: var(--text-secondary);
+}
+body.light-theme .btn-sci:hover {
+  background: rgba(0,0,0,0.08);
+  color: var(--text-primary);
+}
