@@ -779,9 +779,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const totalWeeks = (totalDays / 7).toFixed(1);
 
-    // Business Days math (Mon-Fri)
+    // Business Days math (Mon-Fri, excluding start date for consistency)
     let businessDays = 0;
     let tempDate = new Date(start);
+    tempDate.setDate(tempDate.getDate() + 1);
     while (tempDate <= end) {
       const day = tempDate.getDay();
       if (day !== 0 && day !== 6) { // Not Sunday (0) or Saturday (6)
@@ -791,20 +792,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Render results
-    diffTotalDays.textContent = totalDays;
+    const diffTotalDaysLabel = document.querySelector('#date-sub-diff .duration-highlight-number label');
     diffYears.textContent = years;
     diffMonths.textContent = months;
     diffWeeks.textContent = totalWeeks;
+    diffBusinessDays.textContent = businessDays;
     
     if (excludeWeekends.checked) {
-      diffBusinessDays.textContent = businessDays;
+      diffTotalDays.textContent = businessDays;
+      if (diffTotalDaysLabel) diffTotalDaysLabel.textContent = "Work Days";
       diffBusinessDays.parentElement.style.opacity = '1';
     } else {
-      diffBusinessDays.textContent = businessDays;
+      diffTotalDays.textContent = totalDays;
+      if (diffTotalDaysLabel) diffTotalDaysLabel.textContent = "Total Days";
+      diffBusinessDays.parentElement.style.opacity = '0.6';
     }
   }
 
   calculateDateDiffBtn.addEventListener('click', runDateDiffCalculator);
+  excludeWeekends.addEventListener('change', runDateDiffCalculator);
   runDateDiffCalculator();
 
   // Add/Subtract Offset Elements

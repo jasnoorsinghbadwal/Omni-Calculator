@@ -1713,6 +1713,7 @@ body.light-theme .nav-tab.active {
     flex-direction: column;
     height: 100%;
     flex: 1;
+    align-items: stretch;
   }
   
   .calculator-body-card {
