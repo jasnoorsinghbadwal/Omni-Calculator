@@ -218,43 +218,51 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => handleMathButton(btn));
   });
 
-  // Safe Calculator Math Evaluator
+  // Safe Calculator Math Evaluator (Smart Expression Engine)
   function evaluateExpression() {
     if (!mathState.expression) return;
 
-    let parsedExpr = mathState.expression;
+    let expr = mathState.expression;
 
-    // Convert visuals to math syntax
-    parsedExpr = parsedExpr.replace(/×/g, '*').replace(/÷/g, '/');
-    parsedExpr = parsedExpr.replace(/π/g, 'Math.PI').replace(/e/g, 'Math.E');
+    // ── Step 1: Convert visual symbols to math syntax ──
+    expr = expr.replace(/×/g, '*').replace(/÷/g, '/');
 
-    // Parse factorials (e.g. 5! -> factorial(5))
-    parsedExpr = parsedExpr.replace(/(\d+)!/g, 'factorial($1)');
+    // ── Step 2: Replace π with Math.PI (safe — π is unique unicode) ──
+    expr = expr.replace(/π/g, 'Math.PI');
 
-    // Parse percentages (e.g. 50% -> 50/100)
-    // Avoid breaking percentages used in compound operations, but evaluate standard %
-    parsedExpr = parsedExpr.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
+    // ── Step 3: Replace standalone 'e' with Math.E ──
+    // Only replace 'e' when it's NOT part of a number (scientific notation like 1e5, 2.5e-3)
+    // and NOT part of a word (like 'scale', Math.powEr, etc.)
+    expr = expr.replace(/(?<![a-zA-Z0-9.])e(?![a-zA-Z0-9])/g, 'Math.E');
 
-    // Parse square roots (e.g. √(9) -> Math.sqrt(9))
-    parsedExpr = parsedExpr.replace(/√\(/g, 'Math.sqrt(');
+    // ── Step 4: Parse factorials (e.g. 5! -> factorial(5)) ──
+    expr = expr.replace(/(\d+)!/g, 'factorial($1)');
 
-    // Parse powers (e.g. 2^3 -> Math.pow(2, 3))
-    // Simplistic parser for base^exponent
-    while (parsedExpr.includes('^')) {
-      const match = parsedExpr.match(/(\d+(\.\d+)?)\^([+-]?\d+(\.\d+)?)/);
+    // ── Step 5: Parse percentages (e.g. 50% -> (50/100)) ──
+    expr = expr.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
+
+    // ── Step 6: Parse square roots (√( -> Math.sqrt() ──
+    expr = expr.replace(/√\(/g, 'Math.sqrt(');
+
+    // ── Step 7: Parse powers (^ -> **) ──
+    while (expr.includes('^')) {
+      const match = expr.match(/(\d+(\.\d+)?)\^([+-]?\d+(\.\d+)?)/);
       if (match) {
-        parsedExpr = parsedExpr.replace(match[0], `Math.pow(${match[1]},${match[3]})`);
+        expr = expr.replace(match[0], `Math.pow(${match[1]},${match[3]})`);
       } else {
-        // Fallback for general expressions like (5+2)^2
-        parsedExpr = parsedExpr.replace(/\^/g, '**'); 
+        expr = expr.replace(/\^/g, '**');
         break;
       }
     }
 
-    // Helper functions for Trigonometry with DEG/RAD mapping
+    // ── Step 8: Implicit multiplication ──
+    // 2π, 5Math.PI, 2sin(, 2cos(, 2log(, 2ln(, 2Math.sqrt(, 2(, )(, )2, )Math.PI
+    expr = expr.replace(/(\d)(Math\.|sin|cos|tan|log|ln|factorial|\()/g, '$1*$2');
+    expr = expr.replace(/(\))(Math\.|sin|cos|tan|log|ln|factorial|\(|\d)/g, '$1*$2');
+    expr = expr.replace(/(Math\.PI|Math\.E)(\d|\(|Math\.|sin|cos|tan|log|ln)/g, '$1*$2');
+
+    // ── Step 9: Trig & math helper functions ──
     const degToRad = deg => deg * Math.PI / 180;
-    
-    // Inject trig scope safely
     const sin = x => mathState.isDegMode ? Math.sin(degToRad(x)) : Math.sin(x);
     const cos = x => mathState.isDegMode ? Math.cos(degToRad(x)) : Math.cos(x);
     const tan = x => mathState.isDegMode ? Math.tan(degToRad(x)) : Math.tan(x);
@@ -268,33 +276,44 @@ document.addEventListener('DOMContentLoaded', () => {
       return result;
     };
 
-    // Auto-complete missing closing parentheses
-    const openParens = (parsedExpr.match(/\(/g) || []).length;
-    const closeParens = (parsedExpr.match(/\)/g) || []).length;
+    // ── Step 10: Auto-close unclosed parentheses ──
+    const openParens = (expr.match(/\(/g) || []).length;
+    const closeParens = (expr.match(/\)/g) || []).length;
     if (openParens > closeParens) {
-      parsedExpr += ')'.repeat(openParens - closeParens);
+      expr += ')'.repeat(openParens - closeParens);
+    }
+
+    // ── Step 11: Strip trailing operators to prevent syntax errors ──
+    expr = expr.replace(/[+\-*/]+$/, '');
+
+    // ── Step 12: Resolve empty parentheses like () -> (0) ──
+    expr = expr.replace(/\(\)/g, '(0)');
+
+    // ── Step 13: Fix consecutive operators (e.g. 5++3 -> 5+3, 5*-3 stays) ──
+    expr = expr.replace(/([+\-])\1+/g, '$1'); // ++ -> +, -- -> -
+    expr = expr.replace(/([*/])\1+/g, '$1');   // ** stays, // -> /
+
+    // ── Step 14: Don't evaluate if expression is empty after cleanup ──
+    if (!expr || expr.trim() === '') {
+      sciOutputEl.textContent = '0';
+      return;
     }
 
     try {
-      // Evaluate expression safely in local scope
-      // We map the functions sin, cos, tan, log, ln, factorial into the scope of Function constructor
-      const evalFunc = new Function('sin', 'cos', 'tan', 'log', 'ln', 'factorial', `return ${parsedExpr}`);
+      const evalFunc = new Function('sin', 'cos', 'tan', 'log', 'ln', 'factorial', `return ${expr}`);
       const result = evalFunc(sin, cos, tan, log, ln, factorial);
 
       if (isNaN(result) || !isFinite(result)) {
-        sciOutputEl.textContent = 'Error';
+        sciOutputEl.textContent = result === Infinity ? '∞' : (result === -Infinity ? '-∞' : 'Undefined');
       } else {
-        // Format decimals
-        const formattedResult = Number(result.toFixed(10)).toString(); // removes trailing zeros
+        const formattedResult = Number(result.toFixed(10)).toString();
         sciOutputEl.textContent = formattedResult;
-
-        // Log to history
         pushMathHistory(mathState.expression, formattedResult);
       }
       mathState.isEvaluated = true;
     } catch (e) {
-      console.error(e);
-      sciOutputEl.textContent = 'Syntax Error';
+      console.warn('Calc parse error:', e.message);
+      sciOutputEl.textContent = 'Invalid Expression';
       mathState.isEvaluated = true;
     }
   }
