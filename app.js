@@ -459,13 +459,14 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMathHistory();
   }
 
-  clearMathHistoryBtn.addEventListener('click', () => {
-    if (confirm("Clear all logged history?")) {
+  if (clearMathHistoryBtn) {
+    clearMathHistoryBtn.addEventListener('click', () => {
+      // Direct clear to avoid iframe sandbox confirm() DOMExceptions
       mathState.history = [];
       localStorage.setItem('oc_math_history', JSON.stringify(mathState.history));
       renderMathHistory();
-    }
-  });
+    });
+  }
 
   // Initial standard render
   renderMathHistory();
