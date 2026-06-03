@@ -345,6 +345,9 @@ body.light-theme .nav-tab.active {
 .mobile-history-toggle.hide-toggle {
   display: none !important;
 }
+.history-overlay {
+  display: none;
+}
 
 /* Viewport pane controller */
 .calculator-view-viewport {
@@ -1788,6 +1791,7 @@ body.light-theme .nav-tab.active {
   
   /* History overlay backdrop */
   .history-overlay {
+    display: block;
     position: fixed;
     top: 0;
     left: 0;
